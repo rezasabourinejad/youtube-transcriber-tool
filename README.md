@@ -18,6 +18,7 @@ A modern web application that downloads YouTube videos and converts them to text
 - Python 3.7 or higher
 - FFmpeg
 - yt-dlp
+- AssemblyAI API Key
 
 ## Installation
 
@@ -28,25 +29,33 @@ git clone https://github.com/yourusername/youtube-transcriber.git
 cd youtube-transcriber
 ```
 
-2. Install Node.js dependencies:
+2. Create a `.env` file in the project root and add your AssemblyAI API key:
+
+```bash
+ASSEMBLYAI_API_KEY=your_api_key_here
+```
+
+You can get an API key by signing up at [AssemblyAI](https://www.assemblyai.com/).
+
+3. Install Node.js dependencies:
 
 ```bash
 npm install
 ```
 
-3. Install Python dependencies:
+4. Install Python dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Install FFmpeg:
+5. Install FFmpeg:
 
 - macOS: `brew install ffmpeg`
 - Ubuntu: `sudo apt-get install ffmpeg`
 - Windows: Download from [FFmpeg website](https://ffmpeg.org/download.html)
 
-5. Install yt-dlp:
+6. Install yt-dlp:
 
 ```bash
 pip install yt-dlp
