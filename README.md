@@ -25,8 +25,8 @@ A modern web application that downloads YouTube videos and converts them to text
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/youtube-transcriber.git
-cd youtube-transcriber
+git clone https://github.com/rezasabourinejad/youtube-transcriber-tool.git
+cd youtube-transcriber-tool
 ```
 
 2. Create a `.env` file in the project root and add your AssemblyAI API key:
