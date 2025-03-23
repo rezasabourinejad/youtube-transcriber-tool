@@ -1,11 +1,11 @@
 # YouTube Video Transcriber
 
-A modern web application that downloads YouTube videos and converts them to text using speech recognition. Built with Node.js and Whisper AI.
+A modern web application that downloads YouTube videos and converts them to text using speech recognition. Built with Node.js and AssemblyAI.
 
 ## Features
 
 - 🎥 Download YouTube videos using yt-dlp
-- 🎯 Convert video audio to text using Whisper AI
+- 🎯 Convert video audio to text using AssemblyAI
 - 🔍 Search through transcription with timestamp links
 - 📝 Download transcription as SRT file
 - 🎨 Modern, responsive UI
@@ -89,7 +89,7 @@ http://localhost:3000
 
 1. The application uses yt-dlp to download YouTube videos
 2. FFmpeg extracts the audio from the video
-3. Whisper AI processes the audio and generates accurate transcription
+3. AssemblyAI processes the audio and generates accurate transcription
 4. The transcription is displayed with timestamps and search functionality
 5. Users can download the transcription in SRT format
 
@@ -119,7 +119,7 @@ youtube-transcriber/
 - Express.js
 - FFmpeg
 - YouTube API
-- Speech Recognition API
+- AssemblyAI API
 
 ## Contributing
 
@@ -131,7 +131,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [Whisper AI](https://github.com/openai/whisper) for speech recognition
+- [AssemblyAI](https://www.assemblyai.com/) for speech recognition
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) for YouTube video downloading
 - [FFmpeg](https://ffmpeg.org/) for audio processing
 
