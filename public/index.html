@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video to Text Converter</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --primary-hover: #1d4ed8;
+        --bg-color: #f8fafc;
+        --text-color: #1e293b;
+        --border-color: #e2e8f0;
+        --error-color: #ef4444;
+        --success-color: #22c55e;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.5;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        color: var(--text-color);
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--text-color);
+      }
+
+      .input-group {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        transition: border-color 0.2s;
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      button {
+        padding: 0.75rem 1.5rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      button:hover {
+        background-color: var(--primary-hover);
+      }
+
+      button:disabled {
+        background-color: #94a3b8;
+        cursor: not-allowed;
+      }
+
+      .progress-container {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin: 2rem 0;
+        display: none;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background-color: #e2e8f0;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+      }
+
+      .progress {
+        width: 0%;
+        height: 100%;
+        background-color: var(--primary-color);
+        transition: width 0.3s ease;
+      }
+
+      .progress-text {
+        text-align: center;
+        color: #64748b;
+        font-size: 0.875rem;
+      }
+
+      #result {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+        display: none;
+      }
+
+      #transcription {
+        white-space: pre-wrap;
+        background-color: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin: 1rem 0;
+        font-size: 0.875rem;
+        line-height: 1.7;
+        border: 1px solid var(--border-color);
+        display: none;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .transcription-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        background-color: #f8fafc;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .transcription-header:hover {
+        background-color: #f1f5f9;
+      }
+
+      .transcription-header h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-color);
+      }
+
+      .transcription-header .expand-icon {
+        color: var(--primary-color);
+        transition: transform 0.2s;
+      }
+
+      .transcription-header.expanded .expand-icon {
+        transform: rotate(180deg);
+      }
+
+      .error {
+        background-color: #fee2e2;
+        color: var(--error-color);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin: 1rem 0;
+        font-size: 0.875rem;
+        border: 1px solid #fecaca;
+      }
+
+      .search-container {
+        display: flex;
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .search-container input {
+        flex: 1;
+        margin-bottom: 0;
+      }
+
+      .search-results {
+        margin-top: 1.5rem;
+      }
+
+      .search-result-item {
+        background-color: #f8fafc;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin: 0.5rem 0;
+        border: 1px solid var(--border-color);
+      }
+
+      .timestamp {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        margin-right: 0.5rem;
+      }
+
+      .timestamp:hover {
+        text-decoration: underline;
+      }
+
+      .highlight {
+        background-color: #fef3c7;
+        padding: 0.125rem 0.25rem;
+        border-radius: 0.25rem;
+        font-weight: 500;
+      }
+
+      #downloadSrtBtn {
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Video to Text Converter</h1>
+      <div class="input-group">
+        <input
+          type="text"
+          id="videoUrl"
+          placeholder="Paste your YouTube video URL here"
+        />
+        <button onclick="downloadAndTranscribe()" id="downloadBtn">
+          Download and Convert to Text
+        </button>
+      </div>
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar">
+          <div class="progress" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">Preparing...</div>
+      </div>
+      <div id="result">
+        <h2>Transcription Result</h2>
+        <div class="search-container">
+          <input
+            type="text"
+            id="searchWord"
+            placeholder="Search for a word in the transcription"
+          />
+          <button onclick="searchTranscription()">Search</button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+        <div class="transcription-header" onclick="toggleTranscription()">
+          <h3>Full Transcription</h3>
+          <span class="expand-icon">▼</span>
+        </div>
+        <pre id="transcription"></pre>
+        <button onclick="downloadSRT()" id="downloadSrtBtn">
+          Download SRT File
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let currentTranscription = null;
+      let currentVideoPath = null;
+      let currentSrtPath = null;
+
+      function searchTranscription() {
+        const searchWord = document
+          .getElementById("searchWord")
+          .value.trim()
+          .toLowerCase();
+        if (!searchWord || !currentTranscription) {
+          showError(
+            "Please enter a search word and ensure transcription is complete"
+          );
+          return;
+        }
+
+        const searchResults = document.getElementById("searchResults");
+        searchResults.innerHTML = "";
+        searchResults.style.display = "block";
+
+        const videoUrl = document.getElementById("videoUrl").value;
+        const videoId = videoUrl.match(
+          /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+        )?.[1];
+
+        const matches = currentTranscription.words.filter((word) =>
+          word.text.toLowerCase().includes(searchWord)
+        );
+
+        if (matches.length > 0) {
+          matches.forEach((word) => {
+            const div = document.createElement("div");
+            div.className = "search-result-item";
+
+            const timestamp = formatTime(word.start / 1000);
+            const timestampUrl = videoId
+              ? `https://youtu.be/${videoId}?t=${Math.floor(
+                  word.start / 1000
+                )}s`
+              : "#";
+
+            const context = getWordContext(currentTranscription.words, word);
+            const highlightedContext = context.replace(
+              new RegExp(searchWord, "gi"),
+              (match) => `<span class="highlight">${match}</span>`
+            );
+
+            div.innerHTML = `
+              <a href="${timestampUrl}" target="_blank" class="timestamp">${timestamp}</a>
+              <span class="context">${highlightedContext}</span>
+            `;
+            searchResults.appendChild(div);
+          });
+        } else {
+          searchResults.innerHTML = `<div class="search-result-item">No matches found for "${searchWord}"</div>`;
+        }
+      }
+
+      function formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+      }
+
+      function getWordContext(words, targetWord) {
+        const targetIndex = words.findIndex((w) => w === targetWord);
+        const startIndex = Math.max(0, targetIndex - 5);
+        const endIndex = Math.min(words.length, targetIndex + 6);
+        return words
+          .slice(startIndex, endIndex)
+          .map((w) => w.text)
+          .join(" ");
+      }
+
+      function toggleTranscription() {
+        const transcription = document.getElementById("transcription");
+        const header = document.querySelector(".transcription-header");
+        if (
+          transcription.style.display === "none" ||
+          !transcription.style.display
+        ) {
+          transcription.style.display = "block";
+          header.classList.add("expanded");
+        } else {
+          transcription.style.display = "none";
+          header.classList.remove("expanded");
+        }
+      }
+
+      async function downloadAndTranscribe() {
+        const videoUrl = document.getElementById("videoUrl").value;
+        if (!videoUrl) {
+          showError("Please enter a YouTube URL");
+          return;
+        }
+
+        const downloadBtn = document.getElementById("downloadBtn");
+        const progressContainer = document.getElementById("progressContainer");
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+        const result = document.getElementById("result");
+        const searchResults = document.getElementById("searchResults");
+
+        try {
+          downloadBtn.disabled = true;
+          progressContainer.style.display = "block";
+          searchResults.style.display = "none";
+          progressBar.style.width = "0%";
+          progressText.textContent = "Initializing...";
+
+          const downloadResponse = await fetch("/api/download", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url: videoUrl }),
+          });
+
+          if (!downloadResponse.ok) {
+            throw new Error("Failed to download video");
+          }
+
+          progressBar.style.width = "30%";
+          progressText.textContent = "Downloading video...";
+
+          const downloadResult = await downloadResponse.json();
+          if (downloadResult.error) {
+            throw new Error(downloadResult.error);
+          }
+
+          progressBar.style.width = "50%";
+          progressText.textContent = "Processing video...";
+
+          const videoPath = downloadResult.path;
+
+          const transcribeResponse = await fetch("/api/transcribe", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ videoPath }),
+          });
+
+          if (!transcribeResponse.ok) {
+            throw new Error("Failed to transcribe video");
+          }
+
+          progressBar.style.width = "80%";
+          progressText.textContent = "Converting to text...";
+
+          const transcribeResult = await transcribeResponse.json();
+          if (transcribeResult.error) {
+            throw new Error(transcribeResult.error);
+          }
+
+          progressBar.style.width = "100%";
+          progressText.textContent = "Complete!";
+
+          currentTranscription = transcribeResult;
+          document.getElementById("transcription").textContent =
+            transcribeResult.text;
+          document.getElementById("transcription").style.display = "none";
+          document
+            .querySelector(".transcription-header")
+            .classList.remove("expanded");
+          result.style.display = "block";
+
+          const downloadSrtBtn = document.getElementById("downloadSrtBtn");
+          if (transcribeResult.srtPath) {
+            downloadSrtBtn.style.display = "block";
+            downloadSrtBtn.onclick = () => {
+              window.location.href = `/download-srt?path=${encodeURIComponent(
+                transcribeResult.srtPath
+              )}`;
+            };
+          }
+
+          // Reset progress after a short delay
+          setTimeout(() => {
+            progressContainer.style.display = "none";
+            progressBar.style.width = "0%";
+            progressText.textContent = "Preparing...";
+          }, 2000);
+        } catch (error) {
+          showError(error.message);
+          progressContainer.style.display = "none";
+          progressBar.style.width = "0%";
+          progressText.textContent = "Preparing...";
+        } finally {
+          downloadBtn.disabled = false;
+        }
+      }
+
+      function showError(message) {
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "error";
+        errorDiv.textContent = message;
+        document.body.insertBefore(errorDiv, document.body.firstChild);
+        setTimeout(() => errorDiv.remove(), 5000);
+      }
+
+      function downloadSRT() {
+        if (!currentSrtPath) {
+          showError("No SRT file available");
+          return;
+        }
+        window.location.href = `/download-srt?path=${encodeURIComponent(
+          currentSrtPath
+        )}`;
+      }
+    </script>
+  </body>
+</html>

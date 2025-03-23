@@ -1,0 +1,19 @@
+{
+  "name": "youtube-transcriber",
+  "version": "1.0.0",
+  "description": "YouTube video transcriber using Assembly AI",
+  "main": "youtube-downloader.js",
+  "scripts": {
+    "start": "node youtube-downloader.js"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "assemblyai": "^4.9.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "fluent-ffmpeg": "^2.1.3",
+    "node-fetch": "^2.7.0",
+    "ytdl-core": "^4.11.5"
+  }
+}
